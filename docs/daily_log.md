@@ -49,3 +49,16 @@ I eda_svedavia.ipynb har funktioner lagst till för att :
 
 - Datumen är från dagen man hämtar och två dagar bakåt (inga prefixa datum)
 - I DataFrame gjorde även två kolumner: "Swedavia_airport_name" & "Date_fetched" för att se datum för hämtning och Swedavia fygplats-namn
+
+---
+
+## 11/10 "EDA flight status (arrivals)"
+
+### Medverkande: Rickard
+
+**Beskrivning:** Undersökte kolumnen `remarksEnglish` för arrivals (flight status). Varje flyg har 0, 1 eller 2 meddelanden: ett om flygets status och ett om bagage. Varje meddelande har en tag, NEUTRAL eller NEGATIVE. NEGATIVE är 11 inställda flyg + 9 flyg med ny tid (Arrives/Estimated), troligen försenade men inte verifierat. Inget "Delayed"-meddelande finns för arrivals.
+
+**Information:**
+
+- Fil: `eda/eda_svedavia.ipynb`, se avsnittet "Summary: flight status (arrivals)"
+- Kvar att göra: jämföra de 9 flygen med planerad tid, och göra samma undersökning för departures
