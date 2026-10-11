@@ -62,3 +62,25 @@ I eda_svedavia.ipynb har funktioner lagst till för att :
 
 - Fil: `eda/eda_svedavia.ipynb`, se avsnittet "Summary: flight status (arrivals)"
 - Kvar att göra: jämföra de 9 flygen med planerad tid, och göra samma undersökning för departures
+
+---
+
+## 11/10 "Hur vi räknar försening"
+
+### Medverkande: Alexandra
+
+**Beskrivning:** Eftersom arrivals inte har något "Delayed"-meddelande räknar vi försening från tiderna i stället.
+
+- Försening = faktisk tid (eller beräknad tid om flyget inte landat/startat än) minus planerad tid
+- Försenat = 15 min sent eller mer (kan ändras i `DELAY_THRESHOLD_MIN`)
+- Inställda och borttagna flyg får ingen försening, de har egna kolumner
+- Funktionen `add_delay` lägger till kolumnerna: `delay_minutes`, `is_cancelled`, `is_deleted`, `has_time`, `is_delayed` och `flight_date`
+- `flight_date` = planerad tid i svensk tid. Vi använder den i stället för `Date_fetched`, som bara är datumet vi frågade API:t om
+- Dubbletter (samma flyg på två datum, runt midnatt) är borttagna
+- Kollade mot Swedavias egna varningar (NEGATIVE): de stämmer med vår definition, men de hittar bara 12 av 141 försenade arrivals. Därför är tiderna bättre
+
+**Information:**
+
+- Fil: `eda/eda_swedavia.ipynb`, se avsnittet "Delay definition"
+- Kvar att göra: gruppen behöver godkänna 15 min och `flight_date`. Sen ska samma regler in i dbt
+
