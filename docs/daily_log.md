@@ -84,3 +84,14 @@ I eda_svedavia.ipynb har funktioner lagst till för att :
 - Fil: `eda/eda_swedavia.ipynb`, se avsnittet "Delay definition"
 - Kvar att göra: gruppen behöver godkänna 15 min och `flight_date`. Sen ska samma regler in i dbt
 
+---
+
+## 12/10 "DBdiagram från swedavia filen"
+
+### Medverkande: Filippa
+
+**Beskrivning** Granskade igenom swedavia filen och småbörjade lite med DBdiagram
+
+ - Gått igenom EDA filen från eda_swedavia.ipynb.
+ - Undersökt kolumner och datatyper med hjälp av df.info() och df.dtypes
+ - Identifierat vilka kolumner som kan användas för faktatabellen och dimensionstabellerna t.ex. flygplatser, flygbolag och datum
