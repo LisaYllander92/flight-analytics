@@ -108,3 +108,19 @@ Skapat dbml i db-diagram med fact och dim-tables.
 **Information:**
 
 - Mapp dm-model med png bild på modellen samt dbml-fil för koden.
+
+---
+
+## 13/10 "setup roles, database, warehouse i snowflake filerna"
+
+### Medverkande: Rickard, Filippa
+
+**Beskrivning** fixade setup dbt/dlt roles, database och warehouse
+
+- Skapat roller i DLT/DBT
+- Grantat alla roller access
+- Skapat en Database
+- Skapat en warehouse
+- Allt fixat inom worksheet_snowflake foldern
+
+---
