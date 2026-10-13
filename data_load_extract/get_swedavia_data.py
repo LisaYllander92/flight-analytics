@@ -34,6 +34,7 @@ DATES = [date.today(), date.today() - timedelta(days=1), date.today() -
          timedelta(days=2)]
 
 
+# Flights data with response
 def get_flight_data(url, params):
     # headers with api key
     headers = {
@@ -46,7 +47,8 @@ def get_flight_data(url, params):
     return json.loads(response.content.decode('utf8'))
 
 
-# make a resource for arrival/departure
+# Resource for arrival/departure is created
+# parameter : direction {arrivals/departures}
 def make_flights_resource(direction):
     @dlt.resource(name=direction, write_disposition="replace")
     # resource for the flights arrival/departure
