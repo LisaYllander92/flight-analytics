@@ -1,10 +1,12 @@
 ## Här skriver vi vad som gjorts under dagen.
 
 ```md
-Datum - Rubrik
-Medverkande:
-Beskrivning:
-Information: - vilken fil du jobbat i - var finns ytterligare information - ex mapp/fil
+## Datum - Rubrik
+
+### Medverkande:
+
+**Beskrivning:**
+**Information:** - vilken fil du jobbat i - var finns ytterligare information - ex mapp/fil
 ```
 
 ---
@@ -84,3 +86,13 @@ I eda_svedavia.ipynb har funktioner lagst till för att :
 - Fil: `eda/eda_swedavia.ipynb`, se avsnittet "Delay definition"
 - Kvar att göra: gruppen behöver godkänna 15 min och `flight_date`. Sen ska samma regler in i dbt
 
+## 13/10 - DM model
+
+### Medverkande: Miranda, Lisa, Filippa, Rickard
+
+**Beskrivning:**
+Skapat dbml i db-diagram med fact och dim-tables.
+
+**Information:**
+
+- Mapp dm-model med png bild på modellen samt dbml-fil för koden.
