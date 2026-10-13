@@ -1,10 +1,12 @@
 ## Här skriver vi vad som gjorts under dagen.
 
 ```md
-Datum - Rubrik
-Medverkande:
-Beskrivning:
-Information: - vilken fil du jobbat i - var finns ytterligare information - ex mapp/fil
+## Datum - Rubrik
+
+### Medverkande:
+
+**Beskrivning:**
+**Information:** - vilken fil du jobbat i - var finns ytterligare information - ex mapp/fil
 ```
 
 ---
@@ -84,6 +86,7 @@ I eda_svedavia.ipynb har funktioner lagst till för att :
 - Fil: `eda/eda_swedavia.ipynb`, se avsnittet "Delay definition"
 - Kvar att göra: gruppen behöver godkänna 15 min och `flight_date`. Sen ska samma regler in i dbt
 
+<<<<<<< HEAD
 ---
 
 ## 12/10 "DBdiagram från swedavia filen"
@@ -95,3 +98,15 @@ I eda_svedavia.ipynb har funktioner lagst till för att :
  - Gått igenom EDA filen från eda_swedavia.ipynb.
  - Undersökt kolumner och datatyper med hjälp av df.info() och df.dtypes
  - Identifierat vilka kolumner som kan användas för faktatabellen och dimensionstabellerna t.ex. flygplatser, flygbolag och datum
+=======
+## 13/10 - DM model
+
+### Medverkande: Miranda, Lisa, Filippa, Rickard
+
+**Beskrivning:**
+Skapat dbml i db-diagram med fact och dim-tables.
+
+**Information:**
+
+- Mapp dm-model med png bild på modellen samt dbml-fil för koden.
+>>>>>>> 3505e7def1a3e2fe42fa2fe5d139ce743980900d
