@@ -67,3 +67,12 @@ def make_flights_resource(direction):
                     # When this data was fetched (same for all rows in one run)
                     flight["data_fetched_date"] = datetime.now().isoformat()
                     yield flight
+
+
+# # Source for flights (arrivals & departures)
+# # This will be used in dagster later on
+# @dlt.source
+# def flights_source(airports, dates):
+#     arrivals = make_flights_resource("arrivals")
+#     departures = make_flights_resource("departures")
+#     return arrivals(airports, dates), departures(airports, dates)
