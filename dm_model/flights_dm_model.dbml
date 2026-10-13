@@ -1,0 +1,56 @@
+Table dim_date {
+  date_id int [pk, note: 'YYYYMMDD']
+  date date [not null, unique]
+  year int
+  month int
+  day int
+}
+
+Table dim_airline {
+  airline_id int [pk, note: 'surrogate key']
+  airline_iata varchar [note: 'match against Wikipedia']
+  airline_icao varchar
+  airline_name varchar
+  country varchar [note: 'Wikipedia']
+}
+
+Table dim_airport {
+  airport_id int [pk, note: 'surrogate key']
+  airport_iata varchar [note: 'match against Wikipedia']
+  airport_icao varchar
+  airport_name varchar
+  city varchar
+  country varchar
+}
+
+Table fact_arrivals {
+  arrival_id int [pk, note: 'Surrogate key']
+  flight_id varchar [note: 'Swedavias flightId, degenerate dimension']
+  flight_number varchar [note: 'degenerated dimenstion']
+  date_id int [not null, ref: > dim_date.date_id, note: 'schedueled arrival day']
+  airline_id int [ref: > dim_airline.airline_id]
+  arrival_airport_id int [ref: > dim_airport.airport_id, note: 'Swedavia-airport']
+  departure_airport_id int [ref: > dim_airport.airport_id, note: 'Departure airport for plane']
+  flight_status varchar [note: 'flightLegStatus English']
+  scheduled_arrival_utc timestamp
+  actual_arrival_utc timestamp
+  delay_minutes int [note: 'null if cancelled']
+  is_delayed boolean [note: 'delay_minutes > 15']
+  is_cancelled boolean
+}
+
+Table fact_departures {
+  departure_id int [pk, note: 'Surrogate key']
+  flight_id varchar [note: 'Swedavias flightId, degenerate dimension']
+  flight_number varchar [note: 'degenerate dimension']
+  date_id int [not null, ref: > dim_date.date_id, note: 'schedueled arrrival day']
+  airline_id int [ref: > dim_airline.airline_id]
+  departure_airport_id int [ref: > dim_airport.airport_id, note: 'Swedavia-airports']
+  arrival_airport_id int [ref: > dim_airport.airport_id, note: 'destination']
+  flight_status varchar [note: 'FlightLegStatus English']
+  scheduled_departure_utc timestamp
+  actual_departure_utc timestamp
+  delay_minutes int [note: 'null if cancelled']
+  is_delayed boolean [note: 'delay_minutes > 15']
+  is_cancelled boolean
+}
