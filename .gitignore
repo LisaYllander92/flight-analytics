@@ -1,5 +1,5 @@
 # Byte-compiled / optimized / DLL files
-__pycache__/
+*__pycache__/
 *.py[codz]
 *$py.class
 
@@ -216,4 +216,7 @@ marimo/_static/
 marimo/_lsp/
 __marimo__/
 
-.dlt/secrets.toml
+**/.dlt/
+.dlt
+secrets.toml 
+

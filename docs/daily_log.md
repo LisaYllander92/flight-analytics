@@ -98,29 +98,44 @@ I eda_svedavia.ipynb har funktioner lagst till för att :
 - Undersökt kolumner och datatyper med hjälp av df.info() och df.dtypes
 - Identifierat vilka kolumner som kan användas för faktatabellen och dimensionstabellerna t.ex. flygplatser, flygbolag och datum
 
-## 13/10 - DM model
+## 13/ 10 - DM MODEL | SETUP SNOWFLAKE ACCESS CONTROL | DATA LOAD EXTRACT (WIKI-DATA & SWEDAVIA DATA)
 
 ### Medverkande: Miranda, Lisa, Filippa, Rickard
 
 **Beskrivning:**
-Skapat dbml i db-diagram med fact och dim-tables.
+
+1. Skapat dbml i db-diagram med fact och dim-tables.
+2. fixade setup dbt/dlt roles, database och warehouse
+3. Skapade data_load_extract filer för wikipedia data & swedavia data
+4. Satte upp profiles.yml
+5. Satte upp .dlt/secrets.toml i orchestration-mappen
 
 **Information:**
 
-- Mapp dm-model med png bild på modellen samt dbml-fil för koden.
+**github project issue 34:**
 
----
+- profiles.yml
+- secrets.toml [ligger i .dlt/]
 
-## 13/10 "setup roles, database, warehouse i snowflake filerna"
+**dm_model:**
 
-### Medverkande: Rickard, Filippa
+- png bild på modellen samt dbml-fil för koden.
 
-**Beskrivning** fixade setup dbt/dlt roles, database och warehouse
+**Worksheets mappen:**
 
 - Skapat roller i DLT/DBT
-- Grantat alla roller access
+- skapat user developer
+- Grantat roll
 - Skapat en Database
 - Skapat en warehouse
 - Allt fixat inom worksheet_snowflake foldern
+
+**data_load_extract:**
+
+- Skapat script med dlt resources för wikipedia data airports
+- Skapat script med dlt resources för wikipedia data airlines
+- Skapat script med dlt resources för swedavia data arrivals
+- Skapat script med dlt resources för swedavia data departures
+- Skapat script för run_pipeline där resources laddas in i pipelinen och in till snowflake
 
 ---

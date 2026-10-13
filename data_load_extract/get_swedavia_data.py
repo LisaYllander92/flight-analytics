@@ -35,14 +35,14 @@ DATES = [date.today(), date.today() - timedelta(days=1), date.today() -
 
 
 # Flights data with response
-def get_flight_data(url, params):
+def get_flight_data(url, params=None):
     # headers with api key
     headers = {
         "Ocp-Apim-Subscription-Key": api_key,
         "Accept": "application/json",
     }
 
-    response = requests.get(url, header=headers, params=params)
+    response = requests.get(url, headers=headers, params=params)
     response.raise_for_status()  # check for http errors
     return json.loads(response.content.decode('utf8'))
 
@@ -68,11 +68,13 @@ def make_flights_resource(direction):
                     flight["data_fetched_date"] = datetime.now().isoformat()
                     yield flight
 
+    return resource_flights
+
 
 # # Source for flights (arrivals & departures)
 # # This will be used in dagster later on
-# @dlt.source
-# def flights_source(airports, dates):
-#     arrivals = make_flights_resource("arrivals")
-#     departures = make_flights_resource("departures")
-#     return arrivals(airports, dates), departures(airports, dates)
+@dlt.source
+def flights_source(airports, dates):
+    arrivals = make_flights_resource("arrivals")
+    departures = make_flights_resource("departures")
+    return arrivals(airports, dates), departures(airports, dates)

@@ -11,6 +11,7 @@ import dlt
 import os
 from pathlib import Path
 from get_swedavia_data import flights_source, SWE_AIRPORTS, DATES
+from get_wikipedia_data import airline_codes_resource, airport_codes_resource
 
 
 def run_pipeline():
@@ -21,14 +22,18 @@ def run_pipeline():
     )
 
     load_info = pipeline.run(
-        flights_source(aiports=SWE_AIRPORTS.keys(), dates=DATES)
+        [
+            flights_source(airports=SWE_AIRPORTS.keys(), dates=DATES),
+            airport_codes_resource(),
+            airline_codes_resource()
+        ]
     )
 
     print(load_info)
 
 
 if __name__ == "__main__":
-    working_directory = Path(__file__).parent.parent
+    working_directory = Path(__file__).parent.parent / "orchestration"
     os.chdir(working_directory)
 
     run_pipeline()
