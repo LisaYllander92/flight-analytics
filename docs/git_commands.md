@@ -50,9 +50,9 @@ Kopiera de rader du behöver:
 ```text
 Co-authored-by: Miranda Lyng <lyngmiranda@gmail.com>
 Co-authored-by: Lisa Yllander <lisaylander92@gmail.com>
-Co-authored-by: Alexandra Kaktus <aurabyte.dev@gmail.com>
 Co-authored-by: Rickard Garnau <rickardgarnau@gmail.com>
 Co-authored-by: Filippa Jansson <filippa762@gmail.com>
+Co-authored-by: Alexandra Kaktus <aurabyte.dev@gmail.com>
 ```
 
 Färdigt kommando (kort - för en co-authors):
