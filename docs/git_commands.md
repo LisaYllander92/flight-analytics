@@ -43,7 +43,7 @@ Kontrollera din egen e-post med `git config user.email`. Lägg **inte** till dig
 | Lisa Yllander    | lisaylander92@gmail.com |
 | Alexandra Kaktus | aurabyte.dev@gmail.com  |
 | Rickard Garnau   | rickardgarnau@gmail.com |
-| Filippa Jansson  | filippa762@gmail.com |
+| Filippa Jansson  | filippa762@gmail.com    |
 
 Kopiera de rader du behöver:
 
