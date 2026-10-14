@@ -171,7 +171,7 @@ I eda_svedavia.ipynb har funktioner lagst till för att :
 
 ---
 
-## 14 Okt - src airline & airport
+## 14 Okt - src airline & airport och exempelfiler för secrets
 
 ### Medverkande: Alexandra
 
@@ -184,3 +184,8 @@ I eda_svedavia.ipynb har funktioner lagst till för att :
 - src_airport
   - skriven utifrån Wikipedia-källan airports (airport_iata, airport_icao, airport_name, city)
   - samma rensning som src_airline
+
+
+- Skapade `.env.example` med nycklarna `BASE_URL` och `FLIGHT_KEY` (utan riktiga värden)
+- Skapade `orchestration/.dlt/secrets.toml.example` med Snowflake-uppgifterna för dlt (utan lösenord)
+- Ändrade `.gitignore` så att example-filen i `.dlt/` kommer med i git, medan `secrets.toml` fortfarande ignoreras
