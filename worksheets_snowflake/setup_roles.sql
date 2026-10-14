@@ -26,13 +26,6 @@ GRANT USAGE ON SCHEMA swedavia_db.staging TO ROLE flight_dbt_role;
 GRANT SELECT ON ALL TABLES IN SCHEMA swedavia_db.staging TO ROLE flight_dbt_role;
 GRANT SELECT ON FUTURE TABLES IN SCHEMA swedavia_db.staging TO ROLE flight_dbt_role;
 
--- 6. Flytta ägarskap för redan skapade tabeller till dlt-rollen
---    (behövs bara om SHOW GRANTS visade en annan ägare)
-GRANT OWNERSHIP ON ALL TABLES IN SCHEMA swedavia_db.staging
-  TO ROLE flight_dlt_role COPY CURRENT GRANTS;
-
-
-
 --- TEST 
 USE ROLE flight_dlt_role;
 SELECT * FROM swedavia_db.staging.departures;
