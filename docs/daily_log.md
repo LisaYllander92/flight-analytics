@@ -151,6 +151,19 @@ I eda_svedavia.ipynb har funktioner lagst till för att :
   - sources för wikipedia - data och Swedaviadata har skapats. Dessa ska användas i modellerna för att enkelt kunna hämta sources.
 - Arrivals
   - i src_arrivals har kod för sourcen arrivals skrivits utifrån dimensional modellen NOTERA att flight_number är swedavias egna flight_id.
+- Departures
+  - i src_departures har kod för sourcen departures skrivits utifrån dimensional modellen NOTERA att flight_number är swedavias egna flight_id.
+- Worksheets_snowflake
+  - små korrigeringar i setup_db och setup_roles, borttagning av överflödig text
+- Säkerhet
+  - secrets.toml borttagen ur repot, Snowflake-lösenordet bytt
+  - lösenord i setup_users.sql ersatt med <CHANGE_ME>
+  - profilnamn rättat till dbt_flight, dbt debug grönt
+  - src_departures skriven och testad med dbt show
+- Backlog
+  - #82 generate_schema_name flyttad före #37
 
 **Information:**
-**Mapp:** data_transformation -> src -> sources.yml / src_arrivals /
+**Mapp:** 
+- data_transformation -> dbt_flights -> models -> src -> sources.yml / src_arrivals
+- data_transformation -> dbt_flights -> models -> src -> src_departures
