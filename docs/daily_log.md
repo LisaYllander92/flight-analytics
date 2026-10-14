@@ -139,3 +139,18 @@ I eda_svedavia.ipynb har funktioner lagst till för att :
 - Skapat script för run_pipeline där resources laddas in i pipelinen och in till snowflake
 
 ---
+
+## 14 Okt - sources.yml, scr arrivals & departures
+
+### Medverkande: Miranda & Rickard
+
+**Beskrivning:**
+
+- dimensional model har nu ändrats lite för att stämma överrens med dbt-steget för models (src/dim/fct)
+- sources.yml
+  - sources för wikipedia - data och Swedaviadata har skapats. Dessa ska användas i modellerna för att enkelt kunna hämta sources.
+- Arrivals
+  - i src_arrivals har kod för sourcen arrivals skrivits utifrån dimensional modellen NOTERA att flight_number är swedavias egna flight_id.
+
+**Information:**
+**Mapp:** data_transformation -> src -> sources.yml / src_arrivals /
