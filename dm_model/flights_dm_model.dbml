@@ -4,6 +4,7 @@ Table dim_date {
   year int
   month int
   day int
+  data_fetched_date date 
 }
 
 Table dim_airline {
@@ -20,7 +21,6 @@ Table dim_airport {
   airport_icao varchar
   airport_name varchar
   city varchar
-  country varchar
 }
 
 Table fact_arrivals {
