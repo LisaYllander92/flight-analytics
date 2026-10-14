@@ -1,0 +1,25 @@
+# Sources for swedavia and wikipedia data
+# The names in wikipedia data is changed to airports and airlines for simplicity to use
+
+sources:
+  #############
+  ## Swediavia
+  ############
+  # Name of the swedavia data from arrivals and
+  - name: swedavia
+    schema: staging
+    tables:
+      - name: arrivals
+      - name: departures
+
+  #############
+  ## Wikipedia
+  ############
+  # Name of the wikipedia data for aiports and airlines
+  - name: wikipedia
+    schema: staging
+    tables:
+      - name: airlines
+        identifier: raw_wikipedia_airlines
+      - name: airports
+        identifier: raw_wikipedia_airports
