@@ -2,11 +2,8 @@ import os
 import requests
 import json
 import dlt
-import pandas as pd
 from dotenv import load_dotenv
-from datetime import date
-from datetime import timedelta
-from datetime import datetime
+from datetime import date, timedelta, datetime
 
 load_dotenv()
 
