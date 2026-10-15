@@ -2,9 +2,22 @@ with src_arrivals as (select * from {{ source('swedavia', 'arrivals') }})
 
 
 select 
-    FLIGHT_ID as flight_number, {# use this to create an arrival_id #}
-    LOCATION_AND_STATUS__FLIGHT_LEG_STATUS_ENGLISH as flight_status, 
-    ARRIVAL_TIME__SCHEDULED_UTC as schedueled_arrival, 
-    ARRIVAL_TIME__ACTUAL_UTC as actual_arrival
+    FLIGHT_ID as flight_number, 
+    LOCATION_AND_STATUS__FLIGHT_LEG_STATUS as flight_status_code, 
+    LOCATION_AND_STATUS__FLIGHT_LEG_STATUS_ENGLISH as flight_status,
+    AIRLINE_OPERATOR__IATA as airline_iata, 
+    AIRLINE_OPERATOR__ICAO as airline_icao,  
+    FLIGHT_LEG_IDENTIFIER__DEPARTURE_AIRPORT_IATA as departure_airport_iata, 
+    FLIGHT_LEG_IDENTIFIER__ARRIVAL_AIRPORT_IATA as arrival_airport_iata, 
+    ARRIVAL_TIME__SCHEDULED_UTC as scheduled_arrival_utc, 
+    ARRIVAL_TIME__ACTUAL_UTC as actual_arrival_utc, 
+    ARRIVAL_TIME__ESTIMATED_UTC as estimated_arrival_utc,
+    FLIGHT_LEG_IDENTIFIER__FLIGHT_DEPARTURE_DATE_UTC as flight_departure_date_utc, 
+    QUERY_DATE as api_query_date, 
+    DATA_FETCHED_DATE as data_fetched_date, 
 from src_arrivals
+
+
+
+
 
