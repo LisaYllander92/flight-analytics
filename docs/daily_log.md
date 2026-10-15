@@ -167,3 +167,25 @@ I eda_svedavia.ipynb har funktioner lagst till för att :
 **Mapp:** 
 - data_transformation -> dbt_flights -> models -> src -> sources.yml / src_arrivals
 - data_transformation -> dbt_flights -> models -> src -> src_departures
+
+
+---
+
+## 14 Okt - src airline & airport och exempelfiler för secrets
+
+### Medverkande: Alexandra
+
+**Beskrivning:**
+
+- src_airline
+  - skriven utifrån Wikipedia-källan airlines och dimensional modellen (airline_iata, airline_icao, airline_name, country)
+  - tar bort mellanslag, gör om tom text till null och behåller bara flygbolag med minst en kod
+  - OBS: IATA-koder är inte unika i Wikipedia-listan (t.ex. SK finns två gånger), dubbletter måste hanteras i dim_airline
+- src_airport
+  - skriven utifrån Wikipedia-källan airports (airport_iata, airport_icao, airport_name, city)
+  - samma rensning som src_airline
+
+
+- Skapade `.env.example` med nycklarna `BASE_URL` och `FLIGHT_KEY` (utan riktiga värden)
+- Skapade `orchestration/.dlt/secrets.toml.example` med Snowflake-uppgifterna för dlt (utan lösenord)
+- Ändrade `.gitignore` så att example-filen i `.dlt/` kommer med i git, medan `secrets.toml` fortfarande ignoreras
