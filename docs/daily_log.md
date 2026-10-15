@@ -164,10 +164,10 @@ I eda_svedavia.ipynb har funktioner lagst till för att :
   - #82 generate_schema_name flyttad före #37
 
 **Information:**
-**Mapp:** 
+**Mapp:**
+
 - data_transformation -> dbt_flights -> models -> src -> sources.yml / src_arrivals
 - data_transformation -> dbt_flights -> models -> src -> src_departures
-
 
 ---
 
@@ -185,7 +185,37 @@ I eda_svedavia.ipynb har funktioner lagst till för att :
   - skriven utifrån Wikipedia-källan airports (airport_iata, airport_icao, airport_name, city)
   - samma rensning som src_airline
 
-
 - Skapade `.env.example` med nycklarna `BASE_URL` och `FLIGHT_KEY` (utan riktiga värden)
 - Skapade `orchestration/.dlt/secrets.toml.example` med Snowflake-uppgifterna för dlt (utan lösenord)
 - Ändrade `.gitignore` så att example-filen i `.dlt/` kommer med i git, medan `secrets.toml` fortfarande ignoreras
+
+## 15/10 Dim and fct tables
+
+### Medverkande: Miranda, Rickard, Filippa, Alexandra
+
+**Beskrivning:**
+
+- fct_arrivals
+- fct_departures
+  - added surrogate keys
+  - calculations for delayed
+  - is cancelled
+- macros
+  - generate schema name
+- dbt utils
+  - packages.yml
+- some changes in the dimensional model
+  - example:
+    arrival_airport_id
+    departure_airport_id
+    båda dessa kopplas till airport_id i dim_airport
+
+**Information:**
+
+- in folder dbt_flights run uv run dbt deps
+
+TO DO :
+
+- clean up aiport and airline dim duplicates in iata codes
+- dim dates
+- Joins to create marts
