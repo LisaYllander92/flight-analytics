@@ -4,7 +4,6 @@ Table dim_date {
   year int
   month int
   day int
-  data_fetched_date date 
 }
 
 Table dim_airline {
@@ -26,29 +25,35 @@ Table dim_airport {
 Table fact_arrivals {
   arrival_id int [pk, note: 'Surrogate key']
   flight_number varchar [note: 'Swedavias flightId, degenerate dimension']
-  date_id int [not null, ref: > dim_date.date_id, note: 'schedueled arrival day']
+  date_id int [not null, ref: > dim_date.date_id, note: 'scheduled arrival day, derived from scheduled_arrival_utc']
   airline_id int [ref: > dim_airline.airline_id]
   arrival_airport_id int [ref: > dim_airport.airport_id, note: 'Swedavia-airport']
   departure_airport_id int [ref: > dim_airport.airport_id, note: 'Departure airport for plane']
+  flight_status_code varchar [note: 'flightLegStatus code']
   flight_status varchar [note: 'flightLegStatus English']
   scheduled_arrival_utc timestamp
+  estimated_arrival_utc timestamp
   actual_arrival_utc timestamp
   delay_minutes int [note: 'null if cancelled']
   is_delayed boolean [note: 'delay_minutes > 15']
   is_cancelled boolean
+  data_fetched_date date [note: 'ingestion date from src']
 }
 
 Table fact_departures {
   departure_id int [pk, note: 'Surrogate key']
   flight_number varchar [note: 'Swedavias flightId, degenerate dimension']
-  date_id int [not null, ref: > dim_date.date_id, note: 'schedueled arrrival day']
+  date_id int [not null, ref: > dim_date.date_id, note: 'scheduled departure day, derived from scheduled_departure_utc']
   airline_id int [ref: > dim_airline.airline_id]
-  departure_airport_id int [ref: > dim_airport.airport_id, note: 'Swedavia-airports']
+  departure_airport_id int [ref: > dim_airport.airport_id, note: 'Swedavia-airport']
   arrival_airport_id int [ref: > dim_airport.airport_id, note: 'destination']
-  flight_status varchar [note: 'FlightLegStatus English']
+  flight_status_code varchar [note: 'flightLegStatus code']
+  flight_status varchar [note: 'flightLegStatus English']
   scheduled_departure_utc timestamp
+  estimated_departure_utc timestamp
   actual_departure_utc timestamp
   delay_minutes int [note: 'null if cancelled']
   is_delayed boolean [note: 'delay_minutes > 15']
   is_cancelled boolean
+  data_fetched_date date [note: 'ingestion date from src']
 }
