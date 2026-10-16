@@ -6,7 +6,8 @@ with
 select
     al.airline_name,
     al.airline_country,
-    ap.airport_name,
+    dep.airport_name as departure_airport_name,
+    arr.airport_name as arrival_airport_name, 
     d.date,
     fa.flight_status,
     fa.scheduled_arrival_utc,
@@ -16,7 +17,8 @@ select
 from fct_arrivals fa
 left join dim_date d on fa.date_id = d.date_id
 left join dim_airline al on fa.airline_id = al.airline_id
-left join dim_airport ap on fa.arrival_airport_id = ap.airport_id
+left join dim_airport arr on fa.arrival_airport_id = arr.airport_id
+left join dim_airport dep on fa.departure_airport_id = dep.airport_id
 
 
 
