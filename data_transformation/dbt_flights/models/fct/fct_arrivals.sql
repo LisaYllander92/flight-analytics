@@ -19,5 +19,16 @@ select
     actual_arrival_utc,
     data_fetched_date
 from src_arrivals
+-- keep only one row per unique flight
+qualify row_number() over ( 
+    -- if these row has the exact same information 
+    -- - they hashes as one row, to avoid dupicates
+    partition by
+        flight_number,
+        flight_departure_date_utc,
+        departure_airport_iata,
+        arrival_airport_iata
+    order by data_fetched_date desc, actual_arrival_utc desc nulls last
+) = 1 -- keeps the first row in each group
 
 
