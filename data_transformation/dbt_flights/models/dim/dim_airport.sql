@@ -2,9 +2,8 @@ with src_airport as (select * from {{ ref('src_airport') }})
 
 select
     {{ dbt_utils.generate_surrogate_key(['airport_iata']) }} as airport_id,
-    airport_name,
-    airport_iata,
-    airport_icao,
-    city
+    upper(trim(airport_iata)) as airport_iata,
+    trim(airport_name) as airport_name,
+    trim(city) as city
 from src_airport
 where airport_iata is not null
