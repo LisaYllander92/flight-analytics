@@ -17,8 +17,5 @@ select
     scheduled_departure_utc, 
     estimated_departure_utc, 
     actual_departure_utc, 
-    datediff('minute', scheduled_departure_utc, actual_departure_utc) as delay_minutes,
-    coalesce(datediff('minute', scheduled_departure_utc, actual_departure_utc) >= 15, false) as is_delayed,
-    coalesce(upper(flight_status_code) like '%CAN%', false) as is_cancelled,
     data_fetched_date
 from src_departures
