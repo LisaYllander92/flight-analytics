@@ -12,6 +12,7 @@ select
     {{ dbt_utils.generate_surrogate_key(['airline_iata']) }} as airline_id,
     {{ dbt_utils.generate_surrogate_key(['arrival_airport_iata']) }} as arrival_airport_id,
     {{ dbt_utils.generate_surrogate_key(['departure_airport_iata']) }} as departure_airport_id,
+    {{ dbt_utils.generate_surrogate_key(['cast(scheduled_arrival_utc as date)']) }} as date_id,
     flight_status_code,
     flight_status,
     scheduled_arrival_utc,
