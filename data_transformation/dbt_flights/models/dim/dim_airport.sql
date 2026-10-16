@@ -7,3 +7,4 @@ select
     airport_icao,
     city
 from src_airport
+where airport_iata is not null

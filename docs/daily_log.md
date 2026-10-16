@@ -195,12 +195,14 @@ I eda_svedavia.ipynb har funktioner lagst till för att :
 
 **Beskrivning:**
 
-- fct_arrivals
-- fct_departures
+- fct_arrivals / fct_departures
   - added surrogate keys
   - calculations for delayed
   - is cancelled
-- macros
+- dim_airport
+  - surrogate key from airport_iata
+  - filtered out airports without IATA (143 rows: heliports, hospitals, closed airbases)- macros
+- Macros 
   - generate schema name
 - dbt utils
   - packages.yml
@@ -212,10 +214,11 @@ I eda_svedavia.ipynb har funktioner lagst till för att :
 
 **Information:**
 
-- in folder dbt_flights run uv run dbt deps
+- in folder dbt_flights `uv run dbt deps`
 
 TO DO :
-
 - clean up aiport and airline dim duplicates in iata codes
-- dim dates
-- Joins to create marts
+- dim date
+- joins to create marts
+- add departure_airport_name / arrival_airport_name to src and fct
+- check if nulls in dim_airline
