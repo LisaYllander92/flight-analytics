@@ -29,5 +29,5 @@ def airline_codes_resource():
 
 @dlt.resource(name="raw_wikipedia_airports", write_disposition="replace")
 def airport_codes_resource():
-    yield _read_tables_with_iata("https://en.wikipedia.org/wiki/List_of_airports_in_Sweden")
+    yield _read_tables_with_iata("https://en.wikipedia.org/wiki/List_of_international_airports_by_country")
 
