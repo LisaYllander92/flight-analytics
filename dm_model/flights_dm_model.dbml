@@ -34,9 +34,6 @@ Table fact_arrivals {
   scheduled_arrival_utc timestamp
   estimated_arrival_utc timestamp
   actual_arrival_utc timestamp
-  delay_minutes int [note: 'null if cancelled']
-  is_delayed boolean [note: 'delay_minutes > 15']
-  is_cancelled boolean
   data_fetched_date date [note: 'ingestion date from src']
 }
 
@@ -51,8 +48,6 @@ Table fact_departures {
   flight_status varchar [note: 'flightLegStatus English']
   scheduled_departure_utc timestamp
   estimated_departure_utc timestamp
-  actual_departure_utc timestamp
-  delay_minutes int [note: 'null if cancelled']
-  is_delayed boolean [note: 'delay_minutes > 15']
-  is_cancelled boolean
-  data_fetched_date date [note: 'ingestion date from src']}
+  actual_departure_utc timestamp 
+  data_fetched_date date [note: 'ingestion date from src']
+}
