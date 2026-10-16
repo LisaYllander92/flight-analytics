@@ -1,0 +1,42 @@
+# tests
+
+## Arrivals
+models:
+  - name: fct_arrivals
+    columns:
+      - name: arrival_id
+        data_tests:
+          - unique
+          - not_null
+
+  ## Departure
+  - name: fct_departures
+    columns:
+      - name: departure_id
+        data_tests:
+          - unique
+          - not_null
+
+  ## Dim Date
+  - name: dim_date
+    columns:
+      - name: date_id
+        data_tests:
+          - unique
+          - not null
+
+  ## Dim airport
+  - name: dim_airport
+    columns:
+      - name: airport_id
+        data_tests:
+          - unique
+          - not null
+
+  ## Dim airline
+  - name: dim_airline
+    columns:
+      - name: airline_id
+        data_tests:
+          - unique
+          - not null
