@@ -23,7 +23,7 @@ models:
       - name: date_id
         data_tests:
           - unique
-          - not null
+          - not_null
 
   ## Dim airport
   - name: dim_airport
@@ -31,7 +31,7 @@ models:
       - name: airport_id
         data_tests:
           - unique
-          - not null
+          - not_null
 
   ## Dim airline
   - name: dim_airline
@@ -39,4 +39,4 @@ models:
       - name: airline_id
         data_tests:
           - unique
-          - not null
+          - not_null

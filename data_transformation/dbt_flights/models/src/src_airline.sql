@@ -4,6 +4,6 @@ select
     IATA as airline_iata,
     ICAO as airline_icao,
     AIRLINE as airline_name,
-    COUNTRY_REGION as country
+    COUNTRY_REGION as airline_country
 from src_airlines
 
