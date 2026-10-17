@@ -28,5 +28,5 @@ qualify row_number() over (
         flight_departure_date_utc,
         departure_airport_iata,
         arrival_airport_iata
-    order by case when flight_status = 'Deleted' then 1 else 0 end,
+    order by case when flight_status = 'Deleted' then 1 else 0 end, -- real row before Deleted copy, regardless of fetch order
     data_fetched_date desc, actual_departure_utc desc nulls last) = 1 -- keeps the first row in each group
