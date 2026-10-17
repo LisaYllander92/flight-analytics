@@ -13,7 +13,7 @@ select
     fa.scheduled_arrival_utc,
     fa.actual_arrival_utc,
     datediff('minute', fa.scheduled_arrival_utc, fa.actual_arrival_utc) as delay_minutes,
-    coalesce(delay_minutes >= 15, false) as is_delayed
+    delay_minutes >= 15 as is_delayed
 from fct_arrivals fa
 left join dim_date d on fa.date_id = d.date_id
 left join dim_airline al on fa.airline_id = al.airline_id
