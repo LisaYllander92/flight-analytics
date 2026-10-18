@@ -224,7 +224,7 @@ TO DO :
 - check if nulls in dim_airline
 
 --- 
-16/10 "dim-modeller och marts samt tester i schema.yml"
+### 16/10 "dim-modeller och marts samt tester i schema.yml"
 Medverkande: Miranda, Lisa och Rickard
 Beskrivning: Sett över och fixat i samtliga modeller (src, dom, fct) samt skapat två marts - en för arrivals och en för departures.
 Stötte på en del problem iom dbt testing där vissa hade dubletter på id - därav vissa ändringar. Kört 'dbt build' och nu funkar det.
@@ -238,3 +238,12 @@ Information:
 - models (kolla igenom alla)
 - snowflake under warehouse
 
+---
+### 
+- initiera dagster projekt (utan .venv)
+https://dagster.io/docs/guides/build/projects/creating-projects
+- uppdatera pyprojekt.toml för att dagster ska kunna hitta load-filerna (utan sys)
+- uv add dagster-dg-cli
+- uv sync
+
+- Lägg till @dlt.source i hämtningen av wikipedia-datan - för dagster assets
