@@ -316,3 +316,23 @@ I dashboarden dök flygplatserna Ronneby och Kiruna upp som "Unknown". Vi har nu
 - Filer: data_transformation -> dbt_flights -> seeds/missing_airports.csv, models/dim/dim_airport.sql, dbt_project.yml
 - Utländska flygplatser som saknas (t.ex. AGH, SFT, ZZZ) ligger inte i seeden. De visas fortfarande som 'Unknown' på andra sidan av flyget i marts, men inte i dashboardens flygplatsdiagram, som bara visar den svenska sidan
 - Kör `uv run dbt seed` i dbt_flights innan `dbt build` om du har en tom databas
+
+---
+
+## 19/10 "Färdigställt Dagster och satt upp Docker"
+
+### Medverkande: Filippa, Lisa, Rickard, Miranda
+
+**Beskrivning**
+
+- Vi har skapat jobs, assets, sensor, schedule i orchestration/src/ochestration och testat att det funkar i dagster UI
+- Vi har satt upp docker med två dockerfiles (dwh och dashboard) och testat att det funkar med docker-compose up --build
+- 
+
+**Information:**
+- Vi ändrade i app.py för att kunna koppla docker via .env
+- Uppdatera .env filen - se pinnat meddelande i discord
+- Flytta ut .dlt mappen till root
+
+**Todo**
+- Sätta upp Azure
