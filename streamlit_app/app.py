@@ -4,10 +4,14 @@ Run from the repo root: uv run streamlit run streamlit_app/app.py
 Reads mart_arrivals_info and mart_departures_info in Snowflake (swedavia_db.mart).
 """
 
+import os
 import altair as alt
 import pandas as pd
 import snowflake.connector
 import streamlit as st
+from dotenv import load_dotenv
+
+load_dotenv()  # reads .env when run locally; in Docker the variables already come from env_file
 
 DELAY_THRESHOLD_MIN = 15  # same threshold as the marts (is_delayed)
 MIN_FLIGHTS_IN_RANKING = 5  # hide airlines/airports with too few flights from rankings
@@ -28,7 +32,16 @@ st.set_page_config(page_title="Flight punctuality", page_icon="✈️", layout="
 
 @st.cache_resource
 def get_connection():
-    return snowflake.connector.connect(**st.secrets["snowflake"])
+    # secrets from environment variables, the rest is not secret (same setup as profiles.yml)
+    return snowflake.connector.connect(
+        account=os.getenv("SNOWFLAKE_ACCOUNT"),
+        user="developer",
+        password=os.getenv("SNOWFLAKE_USER_TRANSFORMER_PASSWORD"),
+        role="flight_dbt_role",
+        warehouse="swedavia_wh",
+        database="swedavia_db",
+        schema="mart",
+    )
 
 
 @st.cache_data(ttl=600)
@@ -161,7 +174,7 @@ try:
     flights = load_flights()
 except Exception as e:  # missing secrets, wrong credentials, no network
     st.error(f"Could not load data from Snowflake: {e}")
-    st.info("Copy .streamlit/secrets.toml.example to .streamlit/secrets.toml and fill in your credentials.")
+    st.info("Set SNOWFLAKE_ACCOUNT and SNOWFLAKE_USER_TRANSFORMER_PASSWORD in .env (see .env.example).")
     st.stop()
 
 st.title("✈️ Flight punctuality at Swedish airports")
