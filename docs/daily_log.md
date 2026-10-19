@@ -255,7 +255,7 @@ Information:
 ---
 
 ```md
-## ### 18/10 - "Setup Dagster Project, create dlt assets and update sources.yml"
+### 18/10 - "Setup Dagster Project, create dlt assets and update sources.yml"
 ### Medverkande: Lisa 
 **Beskrivning:**
 - Initierade dagster project med 'uvx create-dagster@latest project my-project' utan uv i mappen
