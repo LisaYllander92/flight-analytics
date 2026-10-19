@@ -7,3 +7,12 @@ services:
         - "3000:3000"
     env_file:
         - .env
+
+  dashboard:
+      build:
+        context: .
+        dockerfile: dockerfile.dashboard
+      ports:
+        - "8501:8501"
+      env_file:
+        - .env
