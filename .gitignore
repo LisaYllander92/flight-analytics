@@ -223,3 +223,4 @@ secrets.toml
 #DuckDB
 *.duckdb
 
+.tmp_dagster_home_*/
