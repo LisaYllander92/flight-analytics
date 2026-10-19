@@ -4,6 +4,7 @@
 from pathlib import Path
 from dagster_dbt import DbtCliResource, DbtProject, dbt_assets
 import dagster as dg
+import os
 
 # Path to the dbt project (the folder that contains dbt_project.yml)
 dbt_project_directory = (
@@ -11,7 +12,7 @@ dbt_project_directory = (
 )
 
 # Folder that contains profiles.yml (Snowflake connection settings)
-profiles_dir = Path.home() / ".dbt"
+profiles_dir = Path(os.getenv("DBT_PROFILES_DIR", Path.home() / ".dbt"))
 
 # Tell Dagster where the dbt project and the profile are
 dbt_project = DbtProject(

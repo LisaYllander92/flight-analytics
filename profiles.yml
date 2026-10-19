@@ -1,0 +1,13 @@
+dbt_flight:
+  target: dev
+  outputs:
+    dev:
+      type: snowflake
+      account: "{{ env_var('SNOWFLAKE_ACCOUNT') }}"
+      user: developer
+      password: "{{ env_var('SNOWFLAKE_USER_TRANSFORMER_PASSWORD') }}"
+      role: flight_dbt_role
+      database: swedavia_db
+      warehouse: swedavia_wh
+      schema: warehouse
+      client_session_keep_alive: False
