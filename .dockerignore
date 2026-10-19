@@ -7,3 +7,4 @@
 *.duckdb
 eda/
 docs/
+**/.dlt/secrets.toml
