@@ -1,20 +1,20 @@
-# flight-punctuality-analytics
-A data pipeline and dashboard for analyzing flight delays at Swedish airports.
-
-## Known data limitations
-
-About 3–8% of flights have an airline or airport that is not in the Wikipedia reference lists, so they show as `Unknown` in the marts. Swedavia often gives only an ICAO code for airlines (e.g. JON, FRO), while the Wikipedia list is matched on IATA. Some small airports and placeholder codes (e.g. RNB, KRN, ZZZ) are also missing.
-
-## Dashboard
+# Dashboard
 
 A Streamlit app that reads the two marts (`mart_arrivals_info`, `mart_departures_info`) in Snowflake.
 
-Run it from the repo root:
+Run it from the repo root. The Snowflake credentials are read from `.env` (see `.env.example`):
 
 ```bash
-cp .streamlit/secrets.toml.example .streamlit/secrets.toml   # then fill in your Snowflake credentials
 uv run streamlit run streamlit_app/app.py
 ```
+
+Or in Docker:
+
+```bash
+docker compose up dashboard
+```
+
+The dashboard is then available at http://localhost:8501.
 
 What it shows:
 
@@ -26,11 +26,12 @@ What it shows:
 
 The airport charts show the Swedish side of each flight: the arrival airport for arrivals and the departure airport for departures.
 
-### Metrics
+## Metrics
 
 - **Delay**: actual time minus scheduled time, in minutes. A flight that is 5 minutes early has a delay of -5.
 - **Delayed flight**: a flight that is 15 minutes or more late. Everything else that has an actual time counts as on time.
 - **Share delayed**: delayed flights divided by flights that have an actual time. Flights that have not landed or departed yet, and cancelled flights, are left out of the share but still count in the flight total.
 - **Cancelled**: flights with status Cancelled. They are shown as a number and never counted as delayed or on time.
 - **Avg delay** (in the data table): the average delay of measured flights. It can be negative or close to zero because early flights pull the average down, so use share delayed to judge punctuality.
-About 3–8% of flights have an airline or airport that is not in the Wikipedia reference lists, so they show as `Unknown` in the marts. Swedavia often gives only an ICAO code for airlines (e.g. JON, FRO), while the Wikipedia list is matched on IATA. Some foreign airports and placeholder codes (e.g. AGH, SFT, ZZZ) are also missing, and show as `Unknown` on the other end of the flight. Swedavia airports that are missing from the Wikipedia list (Ronneby and Kiruna) are added in `data_transformation/dbt_flights/seeds/missing_airports.csv`.
+
+Known data limitations (such as flights shown as `Unknown`) are listed in the [main README](../README.md#10-known-limitations-and-future-work).
