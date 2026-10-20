@@ -1,61 +1,28 @@
-# Use the official Python 3.13 image as the base image for the container
 FROM python:3.13
 
-# Tell dbt where to find profiles.yml (the file with Snowflake connection settings).
-# Without this, dbt would look in ~/.dbt/ which doesn't exist in the container
-ENV DBT_PROFILES_DIR=/pipeline 
+# Tell dbt where to find profiles.yml (otherwise it looks in ~/.dbt/)
+ENV DBT_PROFILES_DIR=/pipeline
 
-# Set /pipeline as the working directory. All following commands run from here,
-# and the folder is created automatically if it doesn't exist
 WORKDIR /pipeline
 
-# Copy ONLY the dependency files first (not the whole codebase).
-# This lets Docker cache the dependency installation layer below:
-# if your code changes but your dependencies don't, Docker skips reinstalling everything
+# Install dependencies first so Docker can cache this layer
+# when only the code changes
 COPY pyproject.toml uv.lock ./
-
-# Install uv (a fast Python package manager) using pip.
-# --no-cache-dir avoids storing pip's download cache, which keeps the image smaller
 RUN pip install --no-cache-dir uv
-
-# Install all dependencies exactly as pinned in uv.lock:
-#   --frozen            -> don't update uv.lock, use it exactly as it is
-#   --no-dev            -> skip development-only packages (e.g. test tools)
-#   --no-install-project -> install only the dependencies, not your own project yet
-#                           (the project code hasn't been copied in at this point)
 RUN uv sync --frozen --no-dev --no-install-project
 
-
-# Copy the dlt code (data extraction from the APIs and loading into Snowflake)
+# Copy the project code: dlt (extract/load), dbt (transformations),
+# Dagster (orchestration) and dbt's connection settings
 COPY data_load_extract/ ./data_load_extract/
-
-# Copy the dbt project (SQL transformations in Snowflake)
 COPY data_transformation/ ./data_transformation/
-
-# Copy the Dagster code (orchestration of dlt and dbt)
 COPY orchestration/ ./orchestration/
-
-# Copy profiles.yml (dbt's connection configuration) into the container.
-# This is where DBT_PROFILES_DIR points to
 COPY profiles.yml /pipeline/profiles.yml
 
-
-# Run uv sync again, now that the project code is present,
-# so that your own project is installed into the environment as well
+# Install the project itself and the dbt packages
 RUN uv sync --frozen --no-dev
-
-# Download the dbt packages (e.g. dbt_utils) that are listed in packages.yml.
-# --project-dir tells dbt where the dbt project is located
 RUN uv run dbt deps --project-dir data_transformation/dbt_flights
 
-# Change the working directory to the orchestration folder,
-# so the container starts in the right place for Dagster
+# Start the Dagster dev server (UI + scheduler) on port 3000,
+# listening on all interfaces so it is reachable from outside the container
 WORKDIR /pipeline/orchestration
-
-# The command that runs when the container starts:
-# starts the Dagster development server (web UI + scheduler)
-#   -m orchestration.definitions -> load the Dagster definitions from this Python module
-#   -h 0.0.0.0                   -> listen on all network interfaces (required so you can reach it from outside the container)
-#   -p 3000                      -> run on port 3000
-
 CMD ["uv", "run", "--frozen", "--no-dev", "dagster", "dev", "-m", "orchestration.definitions", "-h", "0.0.0.0", "-p", "3000"]

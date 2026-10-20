@@ -1,4 +1,4 @@
-# tests
+# Tests for not null and unique values in primary keys
 
 ## Arrivals
 models:
