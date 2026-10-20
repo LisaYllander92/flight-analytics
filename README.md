@@ -73,7 +73,7 @@ The pipeline extracts flight data covering the **past three days** (including th
 
 | Tool | Purpose | Why |
 |------|---------|-----|
-| **dlt** | Data extraction and loading | Lightweight Python-native ingestion with schema handling and incremental loading |
+| **dlt** | Data extraction and loading | Lightweight Python-native ingestion with schema handling. Tables are replaced on every run |
 | **Snowflake** | Cloud data warehouse | Required by the project; separates storage and compute, supports role-based access control |
 | **dbt Core** | Data transformation | SQL-based, version-controlled models with built-in testing and documentation |
 | **Dagster** | Orchestration | Asset-based orchestration with schedules, sensors and a UI; integrates with dlt and dbt |
@@ -90,12 +90,17 @@ The pipeline extracts flight data covering the **past three days** (including th
 ```
 .
 ├── data_load_extract/     # dlt pipelines: Swedavia API + Wikipedia
-├── data_transformation/   # dbt project (src, dim, fct, mart, macros, tests)
+├── data_transformation/
+│   └── dbt_flights/       # dbt project (src, dim, fct, mart, macros, seeds)
 ├── eda/                   # Exploratory work (.ipynb) and EDA
-├── orchestration/         # Dagster project (assets, schedules, sensors)
+├── orchestration/         # Dagster project (assets, jobs, schedules, sensors)
 ├── streamlit_app/         # Streamlit dashboard
+├── worksheets_snowflake/  # SQL scripts for the Snowflake setup
 ├── docs/                  # Data model diagram (dm_model.png) and other docs
+├── dockerfile.dwh         # Docker image for Dagster (dlt + dbt)
+├── dockerfile.dashboard   # Docker image for Streamlit
 ├── docker-compose.yml     # Runs Dagster and Streamlit locally
+├── profiles.yml           # dbt profile used inside the Docker container
 ├── .env.example           # Template for environment variables
 ├── pyproject.toml         # Python dependencies (uv)
 └── README.md
@@ -117,18 +122,18 @@ The pipeline extracts flight data covering the **past three days** (including th
 
 ### 5.2 Set up Snowflake
 
-Before the first run, set up Snowflake with the SQL scripts in `<path/to/snowflake_setup>`. The setup follows access-control best practices:
+Before the first run, set up Snowflake with the SQL scripts in `worksheets_snowflake/`, in this order: `setup_wh.sql`, `setup_db.sql`, `setup_users.sql`, `setup_roles.sql`. The setup follows access-control best practices:
 
-- Dedicated **roles** (e.g. loader, transformer, reporter) with least-privilege grants
-- Dedicated **users** per role/service
-- A dedicated **warehouse**, **database** and **schemas**
-- No use of `ACCOUNTADMIN` for day-to-day work
+- Separate **roles** with least-privilege grants: `flight_dlt_role` writes raw data to `staging`, `flight_dbt_role` reads `staging` and builds the dbt schemas
+- One user, `developer`, that is granted both roles
+- A dedicated **warehouse** (`swedavia_wh`), **database** (`swedavia_db`) and **schemas**
+- Objects are created with `SYSADMIN`, users and roles with `USERADMIN` and `SECURITYADMIN`, not `ACCOUNTADMIN`
 
 ### 5.3 Clone the repository and configure
 
 ```bash
-git clone <repo-url>
-cd <repo-name>
+git clone https://github.com/cactus-commits/flight-punctuality-analytics.git
+cd flight-punctuality-analytics
 cp .env.example .env
 ```
 
@@ -150,11 +155,12 @@ docker compose up --build
 ```bash
 uv sync
 # Dagster
-uv run dagster dev -w <path/to/workspace.yaml>
-# Streamlit (fill in your Snowflake credentials in .streamlit/secrets.toml first)
-cp .streamlit/secrets.toml.example .streamlit/secrets.toml
+uv run dagster dev -m orchestration.definitions
+# Streamlit (reads the Snowflake credentials from .env)
 uv run streamlit run streamlit_app/app.py
 ```
+
+Without Docker, dbt uses your own `~/.dbt/profiles.yml`.
 
 ---
 
@@ -173,6 +179,8 @@ uv run streamlit run streamlit_app/app.py
 2. Use the filters (e.g. date, airport, airline) to explore delayed arrivals and departures.
 3. Compare airlines and airports to identify where delays are concentrated.
 
+See [`streamlit_app/README.md`](streamlit_app/README.md) for what each chart shows and how the metrics are calculated.
+
 ---
 
 ## 7. Data Model
@@ -185,10 +193,10 @@ The transformed data is modelled as a **dimensional model** (star schema), desig
 
 | Layer | Prefix | Description |
 |-------|--------|-------------|
-| **Source / staging** | `src_` | Cleans and standardises raw data from dlt (renaming, type casting, deduplication) |
+| **Source / staging** | `src_` | Selects and renames the columns from the raw dlt tables |
 | **Dimensions** | `dim_` | Descriptive entities: airlines, airports, dates |
-| **Facts** | `fct_` | Flight events (arrivals and departures) with delay measures, linked to dimensions |
-| **Marts** | `mart_` | Business-ready aggregates for the dashboard, e.g. delayed arrivals and departures by airline, airport and date |
+| **Facts** | `fct_` | One row per flight (arrivals and departures), deduplicated and linked to the dimensions |
+| **Marts** | `mart_` | One row per flight with airline, airport and date names, delay in minutes and whether the flight was delayed. Used by the dashboard |
 
 ---
 
@@ -202,7 +210,7 @@ Data quality is checked with dbt tests defined in the `schema.yml` files:
 Run the tests:
 
 ```bash
-cd data_transformation
+cd data_transformation/dbt_flights
 dbt test
 ```
 
@@ -225,26 +233,35 @@ Dagster and Streamlit are containerised separately and deployed to an Azure stud
 
 ### Push images to Azure Container Registry
 
+Create a container registry and enable **Admin user** under *Settings → Access keys*. The login server, username and password are shown on the same page.
+
 ```bash
-# Log in
-az login
-az acr login --name <registry-name>
+# Build both images
+docker compose build
 
-# Build, tag and push
-docker build -t <registry-name>.azurecr.io/dagster:latest -f <path/to/Dockerfile.dagster> .
-docker push <registry-name>.azurecr.io/dagster:latest
+# Log in with the username and password from Access keys
+docker login <registry-name>.azurecr.io
 
-docker build -t <registry-name>.azurecr.io/streamlit:latest -f <path/to/Dockerfile.streamlit> .
-docker push <registry-name>.azurecr.io/streamlit:latest
+# Tag and push
+docker tag flight-punctuality-analytics-dwh_pipeline <registry-name>.azurecr.io/dwh_pipeline:latest
+docker push <registry-name>.azurecr.io/dwh_pipeline:latest
+
+docker tag flight-punctuality-analytics-dashboard <registry-name>.azurecr.io/dashboard:latest
+docker push <registry-name>.azurecr.io/dashboard:latest
 ```
 
-Then configure the Container App and Web App to pull the images from the registry and set the environment variables in [`.env.example`](.env.example) as application settings/secrets.
+Then create the Container App and the Web App from the images in the registry. `.env` is not part of the images, so the variables in [`.env.example`](.env.example) are set as environment variables in Azure:
+
+- **Container App (Dagster):** ingress on, target port `3000`
+- **Web App (Streamlit):** `WEBSITES_PORT=8501`
 
 ---
 
 ## 10. Known Limitations and Future Work
 
 - Only the past three days of data are extracted. No long-term history is kept yet
+- About 3–8% of flights have an airline or airport that is not in the Wikipedia reference lists, so they show as `Unknown` in the marts. Swedavia often gives only an ICAO code for airlines (e.g. JON, FRO), while the Wikipedia list is matched on IATA. Some foreign airports and placeholder codes (e.g. AGH, SFT, ZZZ) are also missing. Swedavia airports that are missing from the Wikipedia list (Ronneby and Kiruna) are added in `data_transformation/dbt_flights/seeds/missing_airports.csv`
+- The date of a flight is taken from the scheduled time in UTC. Flights just after midnight Swedish time (00:00–02:00 in summer time, 00:00–01:00 in winter time) are therefore shown on the previous day
 - Delay metrics depend on the quality and completeness of the Swedavia API data
 - Wikipedia data may be incomplete or change over time
 - More dbt tests (e.g. `relationships`, `accepted_values`) could be added
