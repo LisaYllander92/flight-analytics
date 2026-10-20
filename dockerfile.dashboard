@@ -1,13 +1,18 @@
 FROM python:3.13
 
 WORKDIR /app
-COPY pyproject.toml uv.lock ./
 
+# Install dependencies first so Docker can cache this layer
+# when only the dashboard code changes
+COPY pyproject.toml uv.lock ./
 RUN pip install --no-cache-dir uv
 RUN uv sync --no-dev
 
+# Copy the Streamlit app into the dashboard folder
 WORKDIR /app/dashboard
-
 COPY streamlit_app/ ./streamlit_app/
 
+# Start the dashboard on port 8501, listening on all interfaces
+# so it is reachable from outside the container
+# (uv finds the environment in /app by looking in parent folders)
 CMD ["uv", "run", "streamlit", "run", "streamlit_app/app.py", "--server.port=8501", "--server.address=0.0.0.0"]

@@ -4,10 +4,10 @@ dbt_flight:
     dev:
       type: snowflake
       account: "{{ env_var('SNOWFLAKE_ACCOUNT') }}"
-      user: developer
+      user: "{{ env_var('DESTINATION__SNOWFLAKE__CREDENTIALS__USERNAME') }}"
       password: "{{ env_var('SNOWFLAKE_USER_TRANSFORMER_PASSWORD') }}"
-      role: flight_dbt_role
-      database: swedavia_db
-      warehouse: swedavia_wh
+      role: "{{ env_var('DESTINATION__SNOWFLAKE__CREDENTIALS__ROLE') }}"
+      database: "{{ env_var('DESTINATION__SNOWFLAKE__CREDENTIALS__DATABASE') }}"
+      warehouse: "{{ env_var('DESTINATION__SNOWFLAKE__CREDENTIALS__WAREHOUSE') }}"
       schema: warehouse
       client_session_keep_alive: False

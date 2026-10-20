@@ -1,18 +1,22 @@
 services:
   dwh_pipeline:
-    build: 
+    build:
       context: .
       dockerfile: dockerfile.dwh
     ports:
-        - "3000:3000"
+      - "3000:3000"
     env_file:
-        - .env
+      - .env
+    ##add
+    #image: azure_image_url
 
   dashboard:
-      build:
-        context: .
-        dockerfile: dockerfile.dashboard
-      ports:
-        - "8501:8501"
-      env_file:
-        - .env
+    build:
+      context: .
+      dockerfile: dockerfile.dashboard
+    ports:
+      - "8501:8501"
+    env_file:
+      - .env
+    ##add:
+    #image: azure_image_url

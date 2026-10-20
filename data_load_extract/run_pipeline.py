@@ -3,9 +3,8 @@
 # PIPELINE#
 #################
 
-# This part will be replaced by only the dlt-source
-
-# The pipeline will instead be running in the orchestration definitions - part
+# This pipeline code is not used anymore due to dagster orchestration
+# If you want to run the pipeline locally you can run this script
 
 import dlt
 import os
