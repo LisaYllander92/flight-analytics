@@ -29,7 +29,7 @@ logs/
 
 # dlt (keep the secrets example, ignore everything else)
 **/.dlt/*
-!**/.dlt/secrets.toml.example
+!**/.dlt/secrets.toml
 secrets.toml
 
 # Dagster

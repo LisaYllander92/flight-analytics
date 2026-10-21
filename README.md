@@ -244,18 +244,16 @@ Use the same resource group and region (e.g. Sweden Central) for all resources. 
 Create a container registry and enable **Admin user** under *Settings → Access keys*. The login server, username and password are shown on the same page.
 
 ```bash
-# Build both images
-docker compose build
+# Build both images 
+docker compose build <imagename>
 
 # Log in with the username and password from Access keys
 docker login <registry-name>.azurecr.io
 
-# Tag and push
-docker tag flight-punctuality-analytics-dwh_pipeline <registry-name>.azurecr.io/dwh_pipeline:latest
+# Push images to Azure 
 docker push <registry-name>.azurecr.io/dwh_pipeline:latest
-
-docker tag flight-punctuality-analytics-dashboard <registry-name>.azurecr.io/dashboard:latest
 docker push <registry-name>.azurecr.io/dashboard:latest
+
 ```
 
 Check in the portal under **Container registry → Repositories** that both `dwh_pipeline` and `dashboard` exist with the tag `latest`.
@@ -267,7 +265,7 @@ In the Azure portal: **Container Apps → Create**.
 | Tab | Setting |
 |-----|---------|
 | Basics | Same resource group, a name (e.g. `dagster-container-app`), region Sweden Central |
-| Container | Untick *Use quickstart image*. Source: **Azure Container Registry**, image `dwh_pipeline`, tag `latest` |
+| Container | **If needed**: Untick *Use quickstart image*. Source: **Azure Container Registry**, image `dwh_pipeline`, tag `latest` |
 | Container | Start with **2 CPU / 4 Gi** memory. Too little memory makes the container crash |
 | Ingress | Enable ingress, accept traffic **from anywhere**, **target port `3000`** |
 
@@ -283,9 +281,6 @@ In the Azure portal: **Container Apps → Create**.
 | `DESTINATION__SNOWFLAKE__CREDENTIALS__ROLE` | Role used by the pipeline |
 | *(the rest of `.env.example`)* | e.g. the Swedavia API key |
 
-To store the password as a secret: **Settings → Secrets → Add**, then in the environment variable set *Source* to **Reference a secret**.
-
-Click **Save as a new revision**. Changes only apply once a new revision is running (*Revisions and replicas*).
 
 ### 9.4 Web App (Streamlit)
 
@@ -305,7 +300,7 @@ In the Azure portal: **App Services → Create → Web App**.
 | `WEBSITES_PORT` | `8501` | Azure probes port 80 by default |
 | `STREAMLIT_SERVER_ADDRESS` | `0.0.0.0` | Streamlit must listen externally |
 | `STREAMLIT_SERVER_PORT` | `8501` | |
-| `SNOWFLAKE_ACCOUNT`, `SNOWFLAKE_USER_TRANSFORMER_PASSWORD` and the other `SNOWFLAKE_*` variables the app reads (database, schema, role, warehouse) | from `.env` | Streamlit connects to Snowflake with these |
+| `SNOWFLAKE_ACCOUNT`, `SNOWFLAKE_USER_TRANSFORMER_PASSWORD` and the other `_SNOWFLAKE_*` variables the app reads (database, schema, role, warehouse) | from `.env` | Streamlit connects to Snowflake with these |
 
 Click **Apply**, then **Restart** the Web App.
 
@@ -315,7 +310,7 @@ Click **Apply**, then **Restart** the Web App.
 - **Web App:** open the *Default domain*. The dashboard should look the same as locally. The mart tables must exist in Snowflake, so run the pipeline at least once first.
 - Logs: **Monitoring → Log stream** for both resources.
 
-### 9.6 Updating after code changes
+### 9.6 Updating after code changes or to start it up again
 
 ```bash
 docker compose build
